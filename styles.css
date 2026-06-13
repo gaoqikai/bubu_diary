@@ -1,0 +1,389 @@
+:root {
+    --bg-color: #e0f4ff;
+    --calc-bg: rgba(255, 255, 255, 0.65);
+    --calc-border: rgba(255, 255, 255, 0.6);
+    --text-primary: #4a332a;
+    --text-secondary: #8c6b5d;
+    --btn-bg: rgba(255, 255, 255, 0.7);
+    --btn-hover: rgba(255, 255, 255, 0.95);
+    --btn-active: rgba(240, 240, 240, 0.95);
+    --accent-color: #c4a493;
+    --accent-hover: #b08d7a;
+    --special-color: #ffb6c1;
+    --special-hover: #ff9eaa;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: url('./bubu_bg.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary);
+}
+
+.calculator-container {
+    perspective: 1000px;
+}
+
+.calculator {
+    background: var(--calc-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px solid var(--calc-border);
+    border-radius: 28px;
+    padding: 24px;
+    width: 340px;
+    box-shadow: 0 20px 40px rgba(74, 51, 42, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.calculator:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(74, 51, 42, 0.2);
+}
+
+.display {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    min-height: 120px;
+    word-wrap: break-word;
+    word-break: break-all;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.previous-operand {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    min-height: 24px;
+}
+
+.current-operand {
+    color: var(--text-primary);
+    font-size: 3rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.btn {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: var(--btn-bg);
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-radius: 16px;
+    padding: 16px 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100%; height: 100%;
+    transform: translate(-50%, -50%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.25;
+    z-index: -1;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.btn:hover::before {
+    opacity: 0.45;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.btn:active::before, .btn.active-key::before {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.4);
+}
+
+.btn:nth-child(even)::before {
+    background-image: url('./dudu_head.png');
+}
+
+.btn:nth-child(odd)::before {
+    background-image: url('./bubu_head.png');
+}
+
+.btn:hover {
+    background: var(--btn-hover);
+    transform: scale(1.05);
+}
+
+.btn:active, .btn.active-key {
+    background: var(--btn-active);
+    transform: scale(0.95);
+}
+
+.btn.zero {
+    grid-column: span 2;
+}
+
+.btn.operator {
+    background: rgba(179, 229, 252, 0.8);
+    color: #4a332a;
+}
+
+.btn.operator:hover {
+    background: rgba(129, 212, 250, 0.9);
+}
+
+.btn.operator.active-key {
+    background: rgba(79, 195, 247, 0.9);
+}
+
+.btn.operator-special {
+    background: rgba(255, 182, 193, 0.8);
+    color: #4a332a;
+}
+
+.btn.operator-special:hover {
+    background: rgba(255, 158, 170, 0.9);
+}
+
+.btn.operator-special.active-key {
+    background: rgba(255, 134, 150, 0.9);
+}
+
+.btn.equals {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(196, 164, 147, 0.4);
+}
+
+.btn.equals:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 6px 20px rgba(196, 164, 147, 0.5);
+}
+
+.btn.equals:active, .btn.equals.active-key {
+    background: var(--accent-hover);
+    box-shadow: 0 2px 10px rgba(196, 164, 147, 0.5);
+}
+
+/* Diary Styles */
+.diary-trigger {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a332a;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+.diary-trigger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background: #fff9f5;
+    width: 90%;
+    max-width: 800px;
+    height: 80vh;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid #fff;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #8c6b5d;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+.close-btn:hover {
+    color: #4a332a;
+}
+
+.diary-header {
+    padding: 16px 30px;
+    background: #ffecf0;
+    border-bottom: 2px solid #ffe0e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.diary-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.diary-header h2 {
+    color: #4a332a;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.diary-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.notes-list {
+    width: 250px;
+    background: #fff2eb;
+    border-right: 2px solid #ffe0e6;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.note-item {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+.note-item:hover {
+    background: #fff;
+}
+.note-item.active {
+    border-color: #ffb6c1;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
+}
+.note-item h4 {
+    margin-bottom: 4px;
+    color: #4a332a;
+    font-size: 1rem;
+}
+.note-item p {
+    font-size: 0.8rem;
+    color: #8c6b5d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.note-editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background: #fff;
+}
+
+#note-title {
+    font-size: 1.5rem;
+    border: none;
+    outline: none;
+    color: #4a332a;
+    font-weight: 600;
+    margin-bottom: 16px;
+    background: transparent;
+}
+#note-content {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 1.1rem;
+    color: #4a332a;
+    line-height: 1.6;
+    background: transparent;
+}
+
+.editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #ffe0e6;
+}
+
+.btn-small {
+    background: #ffb6c1;
+    color: #4a332a;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-small:hover {
+    background: #ff9eaa;
+    transform: translateY(-2px);
+}
+.btn-secondary {
+    background: #e0f4ff;
+}
+.btn-secondary:hover {
+    background: #b3e5fc;
+}
